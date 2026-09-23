@@ -34,6 +34,14 @@ pinned transitively. The visor's hash is published here and in `releases.json` (
 The signed manifests and the binaries are served from `binaries.vordium.com`. The machine-readable index is
 `releases.json` there.
 
+## Signing vectors
+| file | what | sha256 |
+|---|---|---|
+| `vectors/agent-ops-vectors-2c1c0679.json` | EIP-712 vectors for the four agent operations (RegisterAgent, RevokeAgent, SetAgentPolicy, SetAgentMarketLimit) on genesis `2c1c0679`: domain + salt rule, type strings/hashes, inputs, struct hashes, digests, and signed cases with the expected result (accepted / rejected). Keys in the file are PUBLIC TEST KEYS only. | `9b25f2456fdb83b669e8d4a72148149a124c9fb18c92353464def4d450be7665` |
+
+The canonical digests are the node's own pinned test vectors; a client implementation must reproduce every digest
+byte-for-byte before it signs anything for this network.
+
 ## How a release is cut
 1. Build the node + visor in the pinned build image; record their sha256.
 2. Write the release's manifest `SHA256SUMS.<sha16>`.
