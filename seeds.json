@@ -1,0 +1,11 @@
+{
+  "_note": "Bootstrap peers for a fresh node, keyed by genesis_sha256 (the network discriminator \u2014 never chain id alone). Each seed is a genesis validator's address with the host:port its consensus listener answers on; copy them into node.toml as [network] peers + validator_endpoints IN THE SAME ORDER as [validators].set (the node builds its route table from the two lists by position and refuses to boot with no routes). This is the ONE deliberate reachable-address exposure in the bundle. Seeds are published here by the release keyholder as public bootstrap endpoints are opened; an empty list means none are public yet.",
+  "networks": [
+    {
+      "network": "vordium",
+      "chain_id": 101101,
+      "genesis_sha256": "2c1c0679fa6ab8358f1d3e8d294a8d1c73ac2e2caf9079f1216abedc3d9fdf4f",
+      "seeds": []
+    }
+  ]
+}

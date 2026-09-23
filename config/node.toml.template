@@ -1,0 +1,77 @@
+# Vordium node.toml — TEMPLATE. Copy to config/node.toml and edit only paths/ports.
+# NO addresses are hand-typed here and NO key material ever goes in this file.
+schema_version = 1
+role = "validator"
+
+[paths]
+data_dir        = "data/chain"
+genesis         = "genesis.json"
+candles_dir     = "data/candles"
+
+[keys]
+# Paths ONLY. Generate the hot key on the box (README step 3) and chmod 0600.
+# The signer reads these; the key bytes never appear in this file.
+validator_key_file = "secrets/validator.key"
+vrf_key_file       = "secrets/vrf-seed"
+signer_socket      = "/run/vordium-signer/signer.sock"
+signer_last_signed = "data/chain/last_signed.json"
+
+[identity]
+# Left EMPTY on purpose. Your validator address is derived from validator_key_file.
+# Do not hand-type an address.
+address = ""
+
+[network]
+# Peers are NOT hand-typed. The launcher populates them from seeds.json for the network
+# whose genesis_sha256 matches genesis.sha256. Leave this empty.
+peers = []
+# The genesis validator set (addresses, vrf pubkeys) is read from genesis.json — not here.
+
+[validators]
+# The seven genesis validators (public identities from genesis.json), address-sorted. Do not edit.
+set = ["0x1CA933bD6d2D72036e32BfDCC3B1f403A7c42775", "0x59E8F6DD422DcC516f61808c6E35a9797e20E5f5", "0x6977aEAf7C44Ad86b2285318Ae76cB072BE762a7", "0xB5195e87B21B11cb3046700e65463aA2a9dd25E1", "0xC6B2b40B03F8c27751C74C6e42169aa938E3d36D", "0xd4b3219c4117ce5e821d4e43c73f954fb4d5dca3", "0xe8f220A8C1F33Df2EC3F313D516d462931f05B96"]
+vrf_pubkeys = ["70bd80551c8d1a8d30f38ce721f1f106d060a06e4ad4f27b3755af79364b941e", "92f512d8885ddfa1a47c19438246c3d4c030e9ebd4b75c5f5ce9e84313603f1f", "04f5f83e2305f98e18ea38127d14e0a2bfcc08553905069b010f2614d0360b20", "dce01bbffaa25b61cc7a162f897d6a17aa9f2538145cf01e224a595357d3ad10", "b4bf6671c975a448b173e3136878b3db83c13ad66318fee9725f6bc2cc44967c", "7441b639301ba08651c575f8a2e70f5aa6641d8aaa6541185109111039a8a713", "8a4528c766a10600084567971b1594c4de67be70c4e0d6666080704646d7cb6d"]
+
+[rpc]
+session_port = 9001
+trading_port = 9002
+ws_port      = 9003
+evm_rpc_port = 9100
+
+[bridge]
+# Public Arbitrum deposit bridge (read-only watch). Not a spending surface.
+contract = "0x2df8de5E39d314fe9cB211507E0897cAbE2A22d4"
+confirmation_depth = 12
+
+[consensus]
+aa1873_activation_height = 0
+aa1874_activation_height = 0
+aa1877_activation_height = 0
+aa1878_activation_height = 0
+aa1882_activation_height = 0
+aa1886_activation_height = 0
+aa1888_activation_height = 0
+aa1889_activation_height = 0
+aa1890_activation_height = 0
+aa1892_activation_height = 0
+aa1897_activation_height = 0
+aa1898_activation_height = 0
+aa1900_activation_height = 0
+aa1901_activation_height = 0
+aa1906_activation_height = 0
+aa1958_activation_height = 0
+aa1963_activation_height = 0
+aa1965_activation_height = 0
+aa1967_activation_height = 0
+aa1968_activation_height = 0
+aa1970_activation_height = 0
+slot_timeout_ms = 750
+batch_proposal_timeout_ms = 1500
+[pruning]
+archive = false
+keep_blocks = 2700000
+compact_on_boot = false
+periodic_compact_secs = 86400
+
+[logging]
+level = "info"
