@@ -34,8 +34,9 @@ that you place with `0600` permissions; the release ships only the *public* rele
 ## The 7-step operator path
 
 Commands assume you have downloaded the release set (`<sha16>` — the node binary, named by its release id exactly as the signed manifest lists it — `vordium-visor`,
-`SHA256SUMS`, `SHA256SUMS.asc`, `genesis.json`, `genesis.sha256`) and this repo's
-`pub_key.asc` into one directory. `<sha16>` is the 16-hex release id printed in `RELEASES.md` (current: `fa2af621c5c64bb9`).
+`SHA256SUMS.<sha16>`, `SHA256SUMS.<sha16>.asc`, `genesis.json`, `genesis.sha256`) and this repo's
+`pub_key.asc` into one directory. `<sha16>` is the 16-hex release id printed in `RELEASES.md` (current: `22f590437dec5b67`).
+Each release has its own signed manifest `SHA256SUMS.<sha16>`; the launch release `fa2af621c5c64bb9` used plain `SHA256SUMS`.
 
 ### 1. Verify the release before you trust a single byte of it
 The visor checks four things and refuses to continue if any fails: the node binary's hash
@@ -44,8 +45,8 @@ release key and no other; `genesis.json` matches `genesis.sha256`; and `pub_key.
 carries the pinned fingerprint. Run it by hand once to see it pass:
 
 ```
-sha256sum -c SHA256SUMS          # the signed manifest names the node binary `<sha16>`
-./vordium-visor pub_key.asc SHA256SUMS SHA256SUMS.asc \
+sha256sum -c SHA256SUMS.<sha16>          # the signed manifest names the node binary `<sha16>`
+./vordium-visor pub_key.asc SHA256SUMS.<sha16> SHA256SUMS.<sha16>.asc \
     <sha16> <sha16> genesis.json genesis.sha256
 echo "exit=$?"     # 0 = accept, 1 = REFUSE (read the REFUSE[...] line), 2 = usage
 ```
@@ -81,8 +82,8 @@ Do **not** hand-type it anywhere; the node derives its identity from this key fi
 
 ### 4. Configure `node.toml` from the template
 Copy `config/node.toml.template` to `config/node.toml`. It carries **no keys** — paths, ports,
-the launch `[consensus]` activation heights (all 0 — every validator runs the same set; do not
-edit them), and the seven genesis validators' **public** identities under `[validators]`. Peering
+the `[consensus]` activation heights (the launch set at 0, plus `aa1998_activation_height = 625000`
+for release `22f590437dec5b67` — every validator runs the same values; do not edit them), and the seven genesis validators' **public** identities under `[validators]`. Peering
 is the one thing you fill in: copy the `seeds.json` entries for this genesis into `[network]`
 `peers` and `validator_endpoints`, **in the same order as `[validators].set`** — the node builds its
 route table from the two lists by position and refuses to boot with no routes.
@@ -144,5 +145,5 @@ See `RELEASES.md` for the current release ids and `SECURITY.md` for the trust mo
 | `RELEASES.md` | release ids + how a release is cut and verified |
 | `SECURITY.md` | trust model, the two-key rule, the deliberate `seeds.json` exposure |
 
-Binaries (`<sha16>` — also served as `vordium-<sha16>`, byte-identical — and `vordium-visor`) and the signed `SHA256SUMS` are served from
+Binaries (`<sha16>` — also served as `vordium-<sha16>`, byte-identical — and `vordium-visor`) and the signed `SHA256SUMS.<sha16>` are served from
 `binaries.vordium.com`, not from this repo.

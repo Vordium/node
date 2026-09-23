@@ -65,6 +65,9 @@ aa1965_activation_height = 0
 aa1967_activation_height = 0
 aa1968_activation_height = 0
 aa1970_activation_height = 0
+# aa1998 (release 22f590437dec5b67) is NOT a launch rule: it activates at block 625000 on this network.
+# Every node must carry this exact value; a node without it (or with another value) diverges at 625000.
+aa1998_activation_height = 625000
 slot_timeout_ms = 750
 batch_proposal_timeout_ms = 1500
 [pruning]
