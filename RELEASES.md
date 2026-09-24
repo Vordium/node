@@ -7,21 +7,27 @@ consumer keys on — the node's `/status`, `seeds.json`, `releases.json`, and th
 
 Current network genesis: `2c1c0679fa6ab8358f1d3e8d294a8d1c73ac2e2caf9079f1216abedc3d9fdf4f`
 
-## Current release — `22f590437dec5b67`
+## Current release — `bddf26dbac2bfb0a`
 | artefact | name | sha256 |
 |---|---|---|
-| node binary | `22f590437dec5b67` (also served as `vordium-22f590437dec5b67`) | `22f590437dec5b678d929b6a282cdcd5a1d358c4b6c7375c6482c0d94846ee5a` |
-| signed manifest | `SHA256SUMS.22f590437dec5b67` + `SHA256SUMS.22f590437dec5b67.asc` | `f224a660c7b7505f834e4d905636b0673f8e98b7ff2bef149267f4146730332d` (manifest file) |
+| node binary | `bddf26dbac2bfb0a` (also served as `vordium-bddf26dbac2bfb0a`) | `bddf26dbac2bfb0a037693ed242d2ec0e13f126dbd6f0e9d0fff369e86234884` |
+| signed manifest | `SHA256SUMS.bddf26dbac2bfb0a` + `SHA256SUMS.bddf26dbac2bfb0a.asc` | `bb7dfb8ab69b00b92e216c2b97bdbcd63f4126494b77db1ee16e257559440805` (manifest file) |
 | visor | `vordium-visor` (unchanged) | `eb743997e563f1bc772ca2ec9518613cfb6c2e64f0c1046b72531d9a64634ed7` |
 | genesis | `genesis.json` (unchanged) | `2c1c0679fa6ab8358f1d3e8d294a8d1c73ac2e2caf9079f1216abedc3d9fdf4f` |
 
-**Activation height: `aa1998_activation_height = 625000`** — every node's `config/node.toml` `[consensus]`
-must carry exactly this value (it is in `config/node.toml.template`). The rules it gates — a one-year lock on
-owner-seeded validator seats and airdrop tranches funded from the Airdrop bucket with the claim window latched on
-the armed emission anchor — apply only to operations executed at or after block 625000. The release also fixes a
-full-fleet restart and makes committed sessions report `confirmed: true` on every node (node-local, no height).
+**Activation heights** — every node's `config/node.toml` `[consensus]` must carry exactly these values (both are in
+`config/node.toml.template`):
+- `aa1998_activation_height = 625000` (from release `22f590437dec5b67`): a one-year lock on owner-seeded validator
+  seats, and airdrop tranches funded from the Airdrop bucket with the claim window latched on the armed emission
+  anchor.
+- `aa2001_activation_height = 845000` (this release): the timelock seal fix. From block 845000 a per-operation
+  timelock override must name the operation's real tier (the stricter tier for an operation whose tier depends on
+  direction), operations 100 (ConfigureTimelock) and 101 (SealTimelocks) carry no per-operation override, and a
+  queued owner operation whose tier has changed since it was queued must wait its new tier's delay before it can
+  execute. These rules apply only to operations executed at or after block 845000; below it the release behaves
+  exactly like `22f590437dec5b67`.
 
-The signed `SHA256SUMS.22f590437dec5b67` covers the node binary under its manifest name `22f590437dec5b67`; the
+The signed `SHA256SUMS.bddf26dbac2bfb0a` covers the node binary under its manifest name `bddf26dbac2bfb0a`; the
 signed node binary in turn carries the genesis sha256 compiled in and refuses any other genesis, so the genesis is
 pinned transitively. The visor's hash is published here and in `releases.json` (unsigned — see the honest limit in
 `SECURITY.md`).
@@ -29,7 +35,8 @@ pinned transitively. The visor's hash is published here and in `releases.json` (
 ## Previous releases
 | release | signed manifest | status |
 |---|---|---|
-| `fa2af621c5c64bb9` (launch) | `SHA256SUMS` + `SHA256SUMS.asc` | superseded by `22f590437dec5b67`. It does not implement the rules active from block 625000 and must not be run at or past that height. |
+| `22f590437dec5b67` | `SHA256SUMS.22f590437dec5b67` + `.asc` | superseded by `bddf26dbac2bfb0a`. It does not implement the rules active from block 845000 and must not be run at or past that height. |
+| `fa2af621c5c64bb9` (launch) | `SHA256SUMS` + `SHA256SUMS.asc` | superseded. It does not implement the rules active from block 625000 and must not be run at or past that height. |
 
 The signed manifests and the binaries are served from `binaries.vordium.com`. The machine-readable index is
 `releases.json` there.

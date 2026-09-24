@@ -68,6 +68,11 @@ aa1970_activation_height = 0
 # aa1998 (release 22f590437dec5b67) is NOT a launch rule: it activates at block 625000 on this network.
 # Every node must carry this exact value; a node without it (or with another value) diverges at 625000.
 aa1998_activation_height = 625000
+# aa2001 (release bddf26dbac2bfb0a) activates at block 845000 on this network: from that height a per-op
+# timelock override must name the op's real tier, ops 100/101 carry no override, and a queued owner op
+# whose tier has changed since it was queued must wait its new tier's delay. Every node must carry this
+# exact value; a node without it (or with another value) would disagree on such an op at or past 845000.
+aa2001_activation_height = 845000
 slot_timeout_ms = 750
 batch_proposal_timeout_ms = 1500
 [pruning]

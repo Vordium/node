@@ -35,7 +35,7 @@ that you place with `0600` permissions; the release ships only the *public* rele
 
 Commands assume you have downloaded the release set (`<sha16>` — the node binary, named by its release id exactly as the signed manifest lists it — `vordium-visor`,
 `SHA256SUMS.<sha16>`, `SHA256SUMS.<sha16>.asc`, `genesis.json`, `genesis.sha256`) and this repo's
-`pub_key.asc` into one directory. `<sha16>` is the 16-hex release id printed in `RELEASES.md` (current: `22f590437dec5b67`).
+`pub_key.asc` into one directory. `<sha16>` is the 16-hex release id printed in `RELEASES.md` (current: `bddf26dbac2bfb0a`).
 Each release has its own signed manifest `SHA256SUMS.<sha16>`; the launch release `fa2af621c5c64bb9` used plain `SHA256SUMS`.
 
 ### 1. Verify the release before you trust a single byte of it
@@ -83,7 +83,8 @@ Do **not** hand-type it anywhere; the node derives its identity from this key fi
 ### 4. Configure `node.toml` from the template
 Copy `config/node.toml.template` to `config/node.toml`. It carries **no keys** — paths, ports,
 the `[consensus]` activation heights (the launch set at 0, plus `aa1998_activation_height = 625000`
-for release `22f590437dec5b67` — every validator runs the same values; do not edit them), and the seven genesis validators' **public** identities under `[validators]`. Peering
+from release `22f590437dec5b67` and `aa2001_activation_height = 845000` from release `bddf26dbac2bfb0a` —
+every validator runs the same values; do not edit them), and the seven genesis validators' **public** identities under `[validators]`. Peering
 is the one thing you fill in: copy the `seeds.json` entries for this genesis into `[network]`
 `peers` and `validator_endpoints`, **in the same order as `[validators].set`** — the node builds its
 route table from the two lists by position and refuses to boot with no routes.
