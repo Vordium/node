@@ -48,7 +48,7 @@ pinned transitively. The visor's hash is published here and in `releases.json` (
 |---|---|---|
 | `bddf26dbac2bfb0a` | `SHA256SUMS.bddf26dbac2bfb0a` + `.asc` | superseded by `0e49718dc0147cfd`. Same consensus rules and activation heights; a node may roll back to it at any height, but it has no proposal persistence and no batch-membership routes. |
 | `22f590437dec5b67` | `SHA256SUMS.22f590437dec5b67` + `.asc` | superseded by `bddf26dbac2bfb0a`. It does not implement the rules active from block 845000 and must not be run at or past that height. |
-| `fa2af621c5c64bb9` (launch) | `SHA256SUMS` + `SHA256SUMS.asc` | superseded. It does not implement the rules active from block 625000 and must not be run at or past that height. |
+| `fa2af621c5c64bb9` (launch) | `SHA256SUMS` + `SHA256SUMS.asc` (frozen: the plain name is the launch manifest and never lists a later release) | superseded. It does not implement the rules active from block 625000 and must not be run at or past that height. |
 
 The signed manifests and the binaries are served from `binaries.vordium.com`. The machine-readable index is
 `releases.json` there.
