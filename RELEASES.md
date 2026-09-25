@@ -40,8 +40,8 @@ are in `config/node.toml.template`):
 
 The signed `SHA256SUMS.0e49718dc0147cfd` covers the node binary under its manifest name `0e49718dc0147cfd`; the
 signed node binary in turn carries the genesis sha256 compiled in and refuses any other genesis, so the genesis is
-pinned transitively. The visor's hash is published here and in `releases.json` (unsigned — see the honest limit in
-`SECURITY.md`).
+pinned transitively. The visor `eb743997e563f1bc` has its own signed manifest, `SHA256SUMS.vordium-visor-eb743997e563f1bc`
++ `.asc` (release key C5EB4728…48AE); from the next release on, `SHA256SUMS.<sha16>` lists the visor as well.
 
 ## Previous releases
 | release | signed manifest | status |

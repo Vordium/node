@@ -14,8 +14,13 @@ The visor refuses to continue unless all four hold, at **every** start:
 4. `pub_key.asc` carries the pinned fingerprint (checked first; nothing else means anything
    without it).
 
-Honest limit: the visor binary itself is covered by no signature. An attacker who is already
-root on your box can replace the visor. The visor raises the cost of a swapped *release*; it
+The visor binary has its own signed manifest, `SHA256SUMS.vordium-visor-eb743997e563f1bc` + `.asc`
+(same release key). Check it by hand before you install the visor:
+`gpg --verify SHA256SUMS.vordium-visor-eb743997e563f1bc.asc && sha256sum -c SHA256SUMS.vordium-visor-eb743997e563f1bc`.
+From the next release on, each release manifest `SHA256SUMS.<sha16>` lists the visor too.
+
+Honest limit: once installed, nothing re-checks the visor itself. An attacker who is already
+root on your box can replace it. The visor raises the cost of a swapped *release*; it
 is not a defense against a compromised host. Protect root access accordingly.
 
 ## Two-key model
