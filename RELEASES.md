@@ -7,25 +7,32 @@ consumer keys on — the node's `/status`, `seeds.json`, `releases.json`, and th
 
 Current network genesis: `2c1c0679fa6ab8358f1d3e8d294a8d1c73ac2e2caf9079f1216abedc3d9fdf4f`
 
-## Current release — `0e49718dc0147cfd`
+## Current release — `1205b19080d08893`
 | artefact | name | sha256 |
 |---|---|---|
-| node binary | `0e49718dc0147cfd` (also served as `vordium-0e49718dc0147cfd`) | `0e49718dc0147cfd1e8e9f0322f93636fd31da2d3052ea79a849526d53931d0b` |
-| signed manifest | `SHA256SUMS.0e49718dc0147cfd` + `SHA256SUMS.0e49718dc0147cfd.asc` | `82e7cc7117eb4dc167e41c82a5ce92daaa33a4e9099bb589cddb482305994510` (manifest file) |
-| visor | `vordium-visor` (unchanged) | `eb743997e563f1bc772ca2ec9518613cfb6c2e64f0c1046b72531d9a64634ed7` |
+| node binary | `1205b19080d08893` (also served as `vordium-1205b19080d08893`) | `1205b19080d088930c6574540b622a3f78c9cb9c8ba3d3cf6f8b80addbdbf50c` |
+| signed manifest | `SHA256SUMS.1205b19080d08893` + `SHA256SUMS.1205b19080d08893.asc` | `0e586d2817658eeb56f849468f79aa9acd717568cd247e192186bdd95eca96a0` (manifest file) |
+| visor | `vordium-visor` (unchanged; now listed in the release manifest) | `eb743997e563f1bc772ca2ec9518613cfb6c2e64f0c1046b72531d9a64634ed7` |
 | genesis | `genesis.json` (unchanged) | `2c1c0679fa6ab8358f1d3e8d294a8d1c73ac2e2caf9079f1216abedc3d9fdf4f` |
 
-What this release adds (node-local behaviour only):
-- **Proposal persistence.** A validator records each slot proposal it signs in `data/chain/last_slot_proposals.json`,
-  durably, before it broadcasts it. After a restart it re-sends the identical proposal or abstains, so a restarted
-  leader never proposes different content for the same slot. Treat the file like `last_signed.json`: never delete it
-  on a running validator.
-- **Finalized batch membership.** `GET /batch/{n}` and `GET /batches?from_height=&to_height=` (batch heights, at most
-  1000 per call) on the node's HTTP port list each committed batch's member blocks — hashes in the order the finalized
-  batch certificate lists them, with their heights. A batch that is not committed yet answers 404.
+What this release changes (node-local behaviour only):
+- **Batch pacing.** The batch coordinator waits only for each leader's first slot (the slots that can arrive), and the
+  pacemaker records success when the batch certificate commits, so a batch no longer closes on the slot timeout.
+- **Owner-only operations.** A session key may not move funds. `VordTransfer`, `WithdrawalRequest`, `VlpDeposit`,
+  `VlpWithdraw`, `Stake`, `Unstake`, `CreateVault`, `VaultDeposit`, `VaultWithdraw`, `VaultClose`, `AirdropClaim`,
+  `VestingClaim` and `ClaimReferralEarnings` must be signed by the owner's own key; a session-key signature is refused
+  at intake with `this op must be signed by its owner — a session key may not move funds`.
+- **Referral claims.** `POST /referral/claim` refuses (403) a claim the referrer did not sign, before it reaches the pool.
+- **Public submit.** `RegisterValidator` is no longer accepted on the public `POST /submit`.
+- **Pause routes.** `/admin/pause` and `/admin/unpause` are retired (410). `EmergencyPause`/`EmergencyUnpause` and the
+  system-only kinds (`MatchOrder`, `LiquidationEvent`, `AdlExecution`, `FundingSettlement`, `SpotMatch`) are never
+  pooled or admitted from gossip.
+- **EVM JSON-RPC (`:9100`).** A read allow-list; `eth_getLogs` needs `fromBlock` and spans at most 10,000 blocks; a batch
+  request carries at most 50 calls; `eth_call` to `0x…080B` answers an error instead of failing the request.
+- **HTTP intake.** A request body cap, requests split across writes, and `Expect: 100-continue` are handled.
 
-**No new activation height and no consensus rule change.** This release agrees with `bddf26dbac2bfb0a` block for block,
-and a node can roll back to `bddf26dbac2bfb0a` at any height (no state or block-store format change).
+**No new activation height and no consensus rule change.** This release agrees with `0e49718dc0147cfd` block for block,
+and a node can roll back to `0e49718dc0147cfd` at any height (no state or block-store format change).
 
 **Activation heights** — unchanged. Every node's `config/node.toml` `[consensus]` must carry exactly these values (both
 are in `config/node.toml.template`):
@@ -38,14 +45,16 @@ are in `config/node.toml.template`):
   and a queued owner operation whose tier has changed since it was queued must wait its new tier's delay before it can
   execute.
 
-The signed `SHA256SUMS.0e49718dc0147cfd` covers the node binary under its manifest name `0e49718dc0147cfd`; the
-signed node binary in turn carries the genesis sha256 compiled in and refuses any other genesis, so the genesis is
-pinned transitively. The visor `eb743997e563f1bc` has its own signed manifest, `SHA256SUMS.vordium-visor-eb743997e563f1bc`
-+ `.asc` (release key C5EB4728…48AE); from the next release on, `SHA256SUMS.<sha16>` lists the visor as well.
+The signed `SHA256SUMS.1205b19080d08893` lists the node binary under its manifest name `1205b19080d08893` and the visor
+`vordium-visor` (`eb743997e563f1bc`). The signed node binary carries the genesis sha256 compiled in and refuses any
+other genesis, so the genesis is pinned transitively. The release index `releases.json` is signed as well:
+`releases.json.asc` (same release key C5EB4728F660369CE519D834B48FB4B71EFD48AE), at `binaries.vordium.com/Mainnet/` and
+`rpc.vordium.com/`.
 
 ## Previous releases
 | release | signed manifest | status |
 |---|---|---|
+| `0e49718dc0147cfd` | `SHA256SUMS.0e49718dc0147cfd` + `.asc` | superseded by `1205b19080d08893`. Same consensus rules and activation heights; a node may roll back to it at any height, but it has the earlier batch pacing and none of the intake changes above. |
 | `bddf26dbac2bfb0a` | `SHA256SUMS.bddf26dbac2bfb0a` + `.asc` | superseded by `0e49718dc0147cfd`. Same consensus rules and activation heights; a node may roll back to it at any height, but it has no proposal persistence and no batch-membership routes. |
 | `22f590437dec5b67` | `SHA256SUMS.22f590437dec5b67` + `.asc` | superseded by `bddf26dbac2bfb0a`. It does not implement the rules active from block 845000 and must not be run at or past that height. |
 | `fa2af621c5c64bb9` (launch) | `SHA256SUMS` + `SHA256SUMS.asc` (frozen: the plain name is the launch manifest and never lists a later release) | superseded. It does not implement the rules active from block 625000 and must not be run at or past that height. |
