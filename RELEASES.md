@@ -7,32 +7,27 @@ consumer keys on — the node's `/status`, `seeds.json`, `releases.json`, and th
 
 Current network genesis: `2c1c0679fa6ab8358f1d3e8d294a8d1c73ac2e2caf9079f1216abedc3d9fdf4f`
 
-## Current release — `1205b19080d08893`
+## Current release — `8f3414f5d39a95b8`
 | artefact | name | sha256 |
 |---|---|---|
-| node binary | `1205b19080d08893` (also served as `vordium-1205b19080d08893`) | `1205b19080d088930c6574540b622a3f78c9cb9c8ba3d3cf6f8b80addbdbf50c` |
-| signed manifest | `SHA256SUMS.1205b19080d08893` + `SHA256SUMS.1205b19080d08893.asc` | `0e586d2817658eeb56f849468f79aa9acd717568cd247e192186bdd95eca96a0` (manifest file) |
-| visor | `vordium-visor` (unchanged; now listed in the release manifest) | `eb743997e563f1bc772ca2ec9518613cfb6c2e64f0c1046b72531d9a64634ed7` |
+| node binary | `8f3414f5d39a95b8` (also served as `vordium-8f3414f5d39a95b8`) | `8f3414f5d39a95b8491f6feea5d19bcaa3d641963af419551380ac1a77b15fc8` |
+| signed manifest | `SHA256SUMS.8f3414f5d39a95b8` + `SHA256SUMS.8f3414f5d39a95b8.asc` | `ec23d96f2fd9a341e41706521ccc303d1d96c40b2de0629a6b11077e047b9641` (manifest file) |
+| visor | `vordium-visor` (unchanged; listed in the release manifest) | `eb743997e563f1bc772ca2ec9518613cfb6c2e64f0c1046b72531d9a64634ed7` |
 | genesis | `genesis.json` (unchanged) | `2c1c0679fa6ab8358f1d3e8d294a8d1c73ac2e2caf9079f1216abedc3d9fdf4f` |
 
-What this release changes (node-local behaviour only):
-- **Batch pacing.** The batch coordinator waits only for each leader's first slot (the slots that can arrive), and the
-  pacemaker records success when the batch certificate commits, so a batch no longer closes on the slot timeout.
-- **Owner-only operations.** A session key may not move funds. `VordTransfer`, `WithdrawalRequest`, `VlpDeposit`,
-  `VlpWithdraw`, `Stake`, `Unstake`, `CreateVault`, `VaultDeposit`, `VaultWithdraw`, `VaultClose`, `AirdropClaim`,
-  `VestingClaim` and `ClaimReferralEarnings` must be signed by the owner's own key; a session-key signature is refused
-  at intake with `this op must be signed by its owner — a session key may not move funds`.
-- **Referral claims.** `POST /referral/claim` refuses (403) a claim the referrer did not sign, before it reaches the pool.
-- **Public submit.** `RegisterValidator` is no longer accepted on the public `POST /submit`.
-- **Pause routes.** `/admin/pause` and `/admin/unpause` are retired (410). `EmergencyPause`/`EmergencyUnpause` and the
-  system-only kinds (`MatchOrder`, `LiquidationEvent`, `AdlExecution`, `FundingSettlement`, `SpotMatch`) are never
-  pooled or admitted from gossip.
-- **EVM JSON-RPC (`:9100`).** A read allow-list; `eth_getLogs` needs `fromBlock` and spans at most 10,000 blocks; a batch
-  request carries at most 50 calls; `eth_call` to `0x…080B` answers an error instead of failing the request.
-- **HTTP intake.** A request body cap, requests split across writes, and `Expect: 100-continue` are handled.
+What this release changes now (node-local behaviour only):
+- **Block sync finishes every batch.** A node that catches up by block sync, or replays its own blocks at boot, now
+  finishes each synced batch exactly as the certified path does: the batch's oracle prices, its commit operations
+  (bridge credits, matches, liquidations, auto-deleveraging, funding), then TP/SL, TWAP and spot. Before, such a node
+  left each synced batch's oracle (and any synced funding settlement) unapplied and logged `state_root divergence` until
+  it reconciled. Peers now send each batch's commit operations with the blocks; a peer on an earlier release does not,
+  and the node then finishes that batch as before and counts it in the `batches_boundary_unknown` log field.
 
-**No new activation height and no consensus rule change.** This release agrees with `0e49718dc0147cfd` block for block,
-and a node can roll back to `0e49718dc0147cfd` at any height (no state or block-store format change).
+**Changes that activate at a height — not active.** This release also carries rule changes that take effect only from
+the height set by `[consensus] aa2007_activation_height`. That height has not been chosen: do **not** add the key (an
+earlier release refuses a `node.toml` that carries it). Without the key this release agrees with `1205b19080d08893`
+block for block, and a node can roll back to `1205b19080d08893` at any height. The height, and the changes it
+activates, will be published in a later signed release index and described here.
 
 **Activation heights** — unchanged. Every node's `config/node.toml` `[consensus]` must carry exactly these values (both
 are in `config/node.toml.template`):
@@ -45,16 +40,17 @@ are in `config/node.toml.template`):
   and a queued owner operation whose tier has changed since it was queued must wait its new tier's delay before it can
   execute.
 
-The signed `SHA256SUMS.1205b19080d08893` lists the node binary under its manifest name `1205b19080d08893` and the visor
+The signed `SHA256SUMS.8f3414f5d39a95b8` lists the node binary under its manifest name `8f3414f5d39a95b8` and the visor
 `vordium-visor` (`eb743997e563f1bc`). The signed node binary carries the genesis sha256 compiled in and refuses any
-other genesis, so the genesis is pinned transitively. The release index `releases.json` is signed as well:
-`releases.json.asc` (same release key C5EB4728F660369CE519D834B48FB4B71EFD48AE), at `binaries.vordium.com/Mainnet/` and
-`rpc.vordium.com/`.
+other genesis, so the genesis is pinned transitively. The release index `releases.json` (+ `releases.json.asc`, same
+release key C5EB4728F660369CE519D834B48FB4B71EFD48AE) at `binaries.vordium.com/Mainnet/` and `rpc.vordium.com/` names
+`1205b19080d08893` as current until its update for this release is signed; both releases run on the network today.
 
 ## Previous releases
 | release | signed manifest | status |
 |---|---|---|
-| `0e49718dc0147cfd` | `SHA256SUMS.0e49718dc0147cfd` + `.asc` | superseded by `1205b19080d08893`. Same consensus rules and activation heights; a node may roll back to it at any height, but it has the earlier batch pacing and none of the intake changes above. |
+| `1205b19080d08893` | `SHA256SUMS.1205b19080d08893` + `.asc` | superseded by `8f3414f5d39a95b8`. Same consensus rules and activation heights while `aa2007_activation_height` is unset; a node may roll back to it at any height until that key is set, but its block sync leaves synced batches unfinished (it logs `state_root divergence` after a catch-up, then reconciles). |
+| `0e49718dc0147cfd` | `SHA256SUMS.0e49718dc0147cfd` + `.asc` | superseded by `1205b19080d08893`. Same consensus rules and activation heights; a node may roll back to it at any height, but it has the earlier batch pacing and none of the intake changes of `1205b19080d08893`. |
 | `bddf26dbac2bfb0a` | `SHA256SUMS.bddf26dbac2bfb0a` + `.asc` | superseded by `0e49718dc0147cfd`. Same consensus rules and activation heights; a node may roll back to it at any height, but it has no proposal persistence and no batch-membership routes. |
 | `22f590437dec5b67` | `SHA256SUMS.22f590437dec5b67` + `.asc` | superseded by `bddf26dbac2bfb0a`. It does not implement the rules active from block 845000 and must not be run at or past that height. |
 | `fa2af621c5c64bb9` (launch) | `SHA256SUMS` + `SHA256SUMS.asc` (frozen: the plain name is the launch manifest and never lists a later release) | superseded. It does not implement the rules active from block 625000 and must not be run at or past that height. |
