@@ -73,6 +73,11 @@ aa1998_activation_height = 625000
 # whose tier has changed since it was queued must wait its new tier's delay. Every node must carry this
 # exact value; a node without it (or with another value) would disagree on such an op at or past 845000.
 aa2001_activation_height = 845000
+# aa2007 (Roll B; the rules ship in every release since 8f3414f5d39a95b8) activates at block 28300000 on this network:
+# from that height every EIP-191 admin message carries 'Genesis: <genesis sha256>' as its third line, raw-tag digests
+# bind the genesis, and the rest of the Roll B rule set applies. Every node must carry this exact value; a node
+# without it (or with another value) diverges at 28300000. Releases older than 8f3414f5d39a95b8 refuse this key.
+aa2007_activation_height = 28300000
 slot_timeout_ms = 750
 batch_proposal_timeout_ms = 1500
 [pruning]

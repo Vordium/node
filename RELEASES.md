@@ -7,37 +7,36 @@ consumer keys on — the node's `/status`, `seeds.json`, `releases.json`, and th
 
 Current network genesis: `2c1c0679fa6ab8358f1d3e8d294a8d1c73ac2e2caf9079f1216abedc3d9fdf4f`
 
-## Current release — `ef49928485806dee`
+## Current release — `db6d34f81ae52174`
 | artefact | name | sha256 |
 |---|---|---|
-| node binary | `ef49928485806dee` (also served as `vordium-ef49928485806dee`) | `ef49928485806dee7b7acb93db1af48feaa3d784adf6945ae95785f46fc1d72a` |
-| signed manifest | `SHA256SUMS.ef49928485806dee` + `SHA256SUMS.ef49928485806dee.asc` | `4d9649474d472d4858ac171ac30774ade269af0b8d76be1addff8ba1f809ddbf` (manifest file) |
+| node binary | `db6d34f81ae52174` (also served as `vordium-db6d34f81ae52174`) | `db6d34f81ae52174b6731619d00e96c6cd4d3a8a44b95403c57079b242ea9415` |
+| signed manifest | `SHA256SUMS.db6d34f81ae52174` + `SHA256SUMS.db6d34f81ae52174.asc` | `a906a8e46538c9703c8cf740f5fdabce9d35d3a5258103a88b6c8a1072c554ab` (manifest file) |
 | visor | `vordium-visor` (unchanged; listed in the release manifest) | `eb743997e563f1bc772ca2ec9518613cfb6c2e64f0c1046b72531d9a64634ed7` |
 | genesis | `genesis.json` (unchanged) | `2c1c0679fa6ab8358f1d3e8d294a8d1c73ac2e2caf9079f1216abedc3d9fdf4f` |
 
-What this release changes now (node-local only — new reads and when a block is built, never what a batch contains or how
-a vote is decided):
-- **Trading records.** After every committed block and every batch the node derives records from committed state —
-  an order placed (with the order id the chain assigned, beside the signed client nonce), an order updated or closed
-  (filled / cancelled / expired, with the reason), each fill (both sides' order ids, the fee paid and where its rate
-  comes from, the taker's realised PnL), funding payments, liquidations, TWAP placed / progress / ended, agent events —
-  into the node's own store (not chain state), kept for the node's block retention. Reads: `GET /block/{n}/events`,
-  `/events/range`, `/events/account/{addr}`, `/events/agent/{addr}`, `/events/coverage`; `/twaps/{addr}` reads
-  committed state. Every answer carries its coverage; a node that restored a snapshot lists the skipped heights as a gap.
-- **`/funding/{pair}`** reads the committed funding schedule (next settlement = the last one + 1 hour; the rate is for
-  one 1-hour interval). **`/status`** carries `withdrawal_fee_usdc_6dec` and `withdrawal_min_gross_usdc_6dec`.
-- **Block building waits for a finished batch.** A slot leader no longer builds a new block while the previous batch is
-  still being applied, and first finishes a batch it received block by block, so the parent root it stamps is final
-  (before this, a node could log one `state_root divergence` at such a batch and then reconcile).
+What this release changes now (node-local only — never what a batch contains or how a vote is decided):
+- **Owner-operation digests on `/block/{n}/ops`.** Each owner-operation envelope carries `op_digest` — the digest the
+  owners signed, which is also the key of the operation in the timelock queue — with `inner_op_bytes` and `inner_hash`.
+  Execute and cancel operations carry `op_digest_hex`, so a queued operation, its execution and its cancellation link up.
+- **Compressed block store.** The block store's main column family is LZ4-compressed for newly written files (it was
+  uncompressed), as is the trading-records store. Older files are rewritten compressed as compaction reaches them. Earlier
+  releases read the compressed files.
+- **`/orders/{addr}` reads committed state.** It lists the account's resting orders as the chain holds them, with the
+  signed `client_nonce`, the exact 8-decimal price, leverage, reduce-only / post-only, time in force, reserved margin,
+  agent and TWAP id. Stop orders held by the node are still listed (`is_stop`, `confirmed:false`).
 
-**Changes that activate at a height — not active.** As in `0796cc84877b96fe`, this release carries rule changes that take effect only
-from the height set by `[consensus] aa2007_activation_height`. That height has not been chosen: do **not** add the key
-(an earlier release refuses a `node.toml` that carries it). Without the key this release agrees with `0796cc84877b96fe` block for
-block, and a node can roll back to `0796cc84877b96fe` at any height. The height, and the changes it activates, will be published in a
-later signed release index and described here.
+**Roll B activates at block 28300000.** This release sets `[consensus] aa2007_activation_height = 28300000` (the rules ship
+in every release since `8f3414f5d39a95b8`; this is the release that sets the height). From block 28300000:
+- every EIP-191 admin message carries `Genesis: <genesis sha256>` as its third line, and raw-tag digests bind the genesis;
+  a message signed the old way is refused from that height (there is no overlap window);
+- clients must not sign a direct message within 3,000 blocks below the height;
+- the rest of the Roll B rule set applies.
+The height is published in the signed `releases.json` (activation key `aa2007_activation_height`). Wallets, the SDK and
+tools read it from there.
 
-**Activation heights** — unchanged. Every node's `config/node.toml` `[consensus]` must carry exactly these values (both
-are in `config/node.toml.template`):
+**Activation heights.** Every node's `config/node.toml` `[consensus]` must carry exactly these values (all three are in
+`config/node.toml.template`):
 - `aa1998_activation_height = 625000` (from release `22f590437dec5b67`): a one-year lock on owner-seeded validator
   seats, and airdrop tranches funded from the Airdrop bucket with the claim window latched on the armed emission
   anchor.
@@ -46,16 +45,23 @@ are in `config/node.toml.template`):
   depends on direction), operations 100 (ConfigureTimelock) and 101 (SealTimelocks) carry no per-operation override,
   and a queued owner operation whose tier has changed since it was queued must wait its new tier's delay before it can
   execute.
+- `aa2007_activation_height = 28300000` (set by this release): Roll B, above. A node without it, or with another value,
+  diverges at 28300000. A release older than `8f3414f5d39a95b8` refuses a `node.toml` that carries it.
 
-The signed `SHA256SUMS.ef49928485806dee` lists the node binary under its manifest name `ef49928485806dee` and the visor `vordium-visor`
+**Rolling back.** Before block 28300000 a node may roll back to `ef49928485806dee` with or without the key. At or after
+it, the only rollback is `ef49928485806dee` with the key kept; never remove the key, and never run a release older than
+`8f3414f5d39a95b8`.
+
+The signed `SHA256SUMS.db6d34f81ae52174` lists the node binary under its manifest name `db6d34f81ae52174` and the visor `vordium-visor`
 (`eb743997e563f1bc`). The signed node binary carries the genesis sha256 compiled in and refuses any other genesis, so the
 genesis is pinned transitively. The release index `releases.json` (+ `releases.json.asc`, same release key
-C5EB4728F660369CE519D834B48FB4B71EFD48AE) at `binaries.vordium.com/Mainnet/` and `rpc.vordium.com/` names `ef49928485806dee` as
-current and `0796cc84877b96fe` as its rollback.
+C5EB4728F660369CE519D834B48FB4B71EFD48AE) at `binaries.vordium.com/Mainnet/` and `rpc.vordium.com/` names `db6d34f81ae52174` as
+current, `ef49928485806dee` as its rollback, and the three activation heights above.
 
 ## Previous releases
 | release | signed manifest | status |
 |---|---|---|
+| `ef49928485806dee` | `SHA256SUMS.ef49928485806dee` + `.asc` | superseded by `db6d34f81ae52174`. Carries the same Roll B rules behind the same key: before block 28300000 a node may roll back to it with or without the key; at or after it, only with the key kept. It serves no owner-operation digests on `/block/{n}/ops`, `/orders/{addr}` is its node-local book, and its block store's main column family writes uncompressed (it reads compressed files). |
 | `0796cc84877b96fe` | `SHA256SUMS.0796cc84877b96fe` + `.asc` | superseded by `ef49928485806dee`. Same consensus rules and activation heights while `aa2007_activation_height` is unset; a node may roll back to it at any height until that key is set, but it serves no trading records, its `/funding/{pair}` answers a rolling next time, and a leader can stamp a parent root before the batch is finished (one `state_root divergence` line, then it reconciles). |
 | `8f3414f5d39a95b8` | `SHA256SUMS.8f3414f5d39a95b8` + `.asc` | superseded by `0796cc84877b96fe`. Same consensus rules and activation heights while `aa2007_activation_height` is unset; a node may roll back to it at any height until that key is set, but its vote check can refuse an honest batch proposal after the node falls behind (one lost vote; the batch still finalizes). |
 | `1205b19080d08893` | `SHA256SUMS.1205b19080d08893` + `.asc` | superseded by `8f3414f5d39a95b8`. Same consensus rules and activation heights while `aa2007_activation_height` is unset; a node may roll back to it at any height until that key is set, but its block sync leaves synced batches unfinished (it logs `state_root divergence` after a catch-up, then reconciles). |
