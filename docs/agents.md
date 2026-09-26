@@ -1,6 +1,6 @@
 # Agent permissions — chain 101101, genesis `2c1c0679`
 
-_Generated from the running node binary `db6d34f8` and the live chain at spec 17 (2026-09-26T18:56:51Z). Machine-readable twin: `agents` in https://rpc.vordium.com/network-spec.json._
+_Generated from the running node binary `db6d34f8` and the live chain at spec 19 (2026-09-26T21:59:03Z). Machine-readable twin: `agents` in https://rpc.vordium.com/network-spec.json._
 
 ## Status on the live chain today
 
@@ -204,7 +204,7 @@ Session-signed ops that run **no agent check at all**, even with the gate on: `P
 - policy: SetAgentPolicy.expires_ms — enforced by the policy gate (block time); no maximum
 - record: RegisterAgent.expires_ms — stored and served, NOT enforced; status 'expired' is never assigned
 - session: SessionCreate.expires_at (seconds) — max now + the compiled session horizon (or chain-param 241)
-- atExpiry: policy gate refuses with 'agent: policy expired'; an expired session key no longer verifies
+- atExpiry: policy gate refuses with 'agent: policy expired'; an expired session key does not verify
 - The clock is the block timestamp (milliseconds; seconds for sessions), identical on every validator. No maximum bounds a policy's or a record's `expires_ms`.
 
 ## Nonces
@@ -290,4 +290,4 @@ The node has no read-only path that verifies these ops, so each vector was check
 The same digests signed by the agent key recover to the agent address and are refused for every op above (for SetAgentPolicy: refused at intake and gossip, which admit only the owner's own signature). The SessionCreate vector's `expiresAt` illustrates the encoding only: a real create needs block time < expiresAt ≤ block time + 7776000 s.
 
 
-_Generated from node binary `db6d34f8`; network-spec v17._
+_Generated from node binary `db6d34f8`; network-spec v19._
