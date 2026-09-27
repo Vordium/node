@@ -24,4 +24,4 @@ Activation heights (`[consensus]` in `config/node.toml`; every node carries exac
 |---|---|
 | `aa1998_activation_height` | 625000 |
 | `aa2001_activation_height` | 845000 |
-| `aa2007_activation_height` | 28300000 |
+| `aa2007_activation_height` | 22100000 |

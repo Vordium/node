@@ -68,7 +68,7 @@ aa1970_activation_height = 0
 # Activation heights on this network. Every node must carry exactly these values.
 aa1998_activation_height = 625000
 aa2001_activation_height = 845000
-aa2007_activation_height = 28300000
+aa2007_activation_height = 22100000
 slot_timeout_ms = 750
 batch_proposal_timeout_ms = 1500
 [pruning]
