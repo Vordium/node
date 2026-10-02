@@ -36,7 +36,7 @@ that you place with `0600` permissions; the release ships only the *public* rele
 Commands assume you have downloaded the release set (`<sha16>` — the node binary, named by its release id exactly as the signed manifest lists it — `vordium-visor`,
 `SHA256SUMS.<sha16>`, `SHA256SUMS.<sha16>.asc`, `genesis.sha256`) and this repo's `pub_key.asc` into one
 directory, together with `genesis.json`. The genesis file is not published: an admitted validator receives it privately
-and checks it against the published `genesis.sha256` (step 2) before first boot. `<sha16>` is the 16-hex release id printed in `RELEASES.md` (current: `4f492fd4b78807b6`).
+and checks it against the published `genesis.sha256` (step 2) before first boot. `<sha16>` is the 16-hex release id printed in `RELEASES.md` (current: `a7dd4d8fbc25e3bf`).
 Each release has its own signed manifest `SHA256SUMS.<sha16>`. The plain `SHA256SUMS` (+ `.asc`) is the **frozen** manifest of the
 launch release `fa2af621c5c64bb9`: it is signed, it is never edited, and it will never list a later release — always verify
 against `SHA256SUMS.<sha16>` for the release you run.
