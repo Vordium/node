@@ -1,0 +1,9 @@
+[Unit]
+Description=Run Vordium store compaction daily
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+
+[Install]
+WantedBy=timers.target

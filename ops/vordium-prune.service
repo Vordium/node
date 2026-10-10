@@ -1,0 +1,8 @@
+[Unit]
+Description=Vordium chain store periodic compaction
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/vordium
+EnvironmentFile=/opt/vordium/node.env
+ExecStart=/opt/vordium/bin/vordiumchain prune --config config/node.toml

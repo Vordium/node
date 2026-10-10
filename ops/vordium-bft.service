@@ -1,0 +1,18 @@
+[Unit]
+Description=Vordium validator (BFT consensus)
+After=network-online.target vordium-signer.service
+Wants=network-online.target
+Requires=vordium-signer.service
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/vordium
+EnvironmentFile=/opt/vordium/node.env
+ExecStart=/opt/vordium/bin/vordiumchain
+Restart=always
+RestartSec=2
+LimitNOFILE=65536
+# The visor runs as ExecStartPre via the drop-in ops/visor.conf and gates every start.
+
+[Install]
+WantedBy=multi-user.target
