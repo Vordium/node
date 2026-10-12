@@ -1,1 +1,104 @@
-{"schema": 1, "chain_id": 101102, "generated_at": "2026-10-12T01:04:49Z", "current": "b7fca39a1c653695", "releases": [{"sha16": "b7fca39a1c653695", "sha256": "b7fca39a1c65369574de198299be5723b26dffdb5c47abe52b8ee1ca8007a8ce", "activation_height": 49896000, "activation_key": "aa2137_activation_height", "activations": [{"key": "aa1998_activation_height", "name": "Validator seat lock and airdrop schedule", "summary": "Seeded validator seats keep their one-year lock; airdrop tranches follow the emission start.", "height": 0}, {"key": "aa2001_activation_height", "name": "Scheduled-change safeguards", "summary": "A scheduled change runs only under the rules that apply to its own operation.", "height": 0}, {"key": "aa2007_activation_height", "name": "Named agents", "summary": "Named agents with policies, signatures bound to this chain's genesis, and trading safety fixes.", "height": 0}, {"key": "aa2086_activation_height", "name": "Validator self-unjail", "summary": "A jailed validator unjails itself after its jail period, which doubles for repeat offences.", "height": 49538000}, {"key": "aa2007c_activation_height", "name": "Stake-based emission", "summary": "Block emission follows the seated stake, within the published yearly ceiling.", "height": 49896000}, {"key": "aa2137_activation_height", "name": "Validator onboarding", "summary": "New validators join jailed and unjail themselves; a bench above 21 seats; a voting-power cap; own bonds behind a switch.", "height": 49896000}], "rollback": null, "class": 1, "notes": "Test network build. Every rule listed here is active on the test chain from the height shown."}], "testnet": true}
+{
+  "schema": 1,
+  "chain_id": 101102,
+  "generated_at": "2026-10-12T12:14:34Z",
+  "current": "ab5e2ed41d7de3b5",
+  "releases": [
+    {
+      "sha16": "ab5e2ed41d7de3b5",
+      "sha256": "ab5e2ed41d7de3b5c3d9ad6f06f93ba250cfd3c48dff2f202644ea02275dd944",
+      "activation_height": 49896000,
+      "activation_key": "aa2137_activation_height",
+      "activations": [
+        {
+          "key": "aa1998_activation_height",
+          "name": "Validator seat lock and airdrop schedule",
+          "summary": "Seeded validator seats keep their one-year lock; airdrop tranches follow the emission start.",
+          "height": 0
+        },
+        {
+          "key": "aa2001_activation_height",
+          "name": "Scheduled-change safeguards",
+          "summary": "A scheduled change runs only under the rules that apply to its own operation.",
+          "height": 0
+        },
+        {
+          "key": "aa2007_activation_height",
+          "name": "Named agents",
+          "summary": "Named agents with policies, signatures bound to this chain's genesis, and trading safety fixes.",
+          "height": 0
+        },
+        {
+          "key": "aa2086_activation_height",
+          "name": "Validator self-unjail",
+          "summary": "A jailed validator unjails itself after its jail period, which doubles for repeat offences.",
+          "height": 49538000
+        },
+        {
+          "key": "aa2007c_activation_height",
+          "name": "Stake-based emission",
+          "summary": "Block emission follows the seated stake, within the published yearly ceiling.",
+          "height": 49896000
+        },
+        {
+          "key": "aa2137_activation_height",
+          "name": "Validator onboarding",
+          "summary": "New validators join jailed and unjail themselves; a bench above 21 seats; a voting-power cap; own bonds behind a switch.",
+          "height": 49896000
+        }
+      ],
+      "rollback": "b7fca39a1c653695",
+      "class": 1,
+      "notes": "Test network build. Every rule listed here is active on the test chain from the height shown.",
+      "switch_after_ms": 1791811800000
+    },
+    {
+      "sha16": "b7fca39a1c653695",
+      "sha256": "b7fca39a1c65369574de198299be5723b26dffdb5c47abe52b8ee1ca8007a8ce",
+      "activation_height": 49896000,
+      "activation_key": "aa2137_activation_height",
+      "activations": [
+        {
+          "key": "aa1998_activation_height",
+          "name": "Validator seat lock and airdrop schedule",
+          "summary": "Seeded validator seats keep their one-year lock; airdrop tranches follow the emission start.",
+          "height": 0
+        },
+        {
+          "key": "aa2001_activation_height",
+          "name": "Scheduled-change safeguards",
+          "summary": "A scheduled change runs only under the rules that apply to its own operation.",
+          "height": 0
+        },
+        {
+          "key": "aa2007_activation_height",
+          "name": "Named agents",
+          "summary": "Named agents with policies, signatures bound to this chain's genesis, and trading safety fixes.",
+          "height": 0
+        },
+        {
+          "key": "aa2086_activation_height",
+          "name": "Validator self-unjail",
+          "summary": "A jailed validator unjails itself after its jail period, which doubles for repeat offences.",
+          "height": 49538000
+        },
+        {
+          "key": "aa2007c_activation_height",
+          "name": "Stake-based emission",
+          "summary": "Block emission follows the seated stake, within the published yearly ceiling.",
+          "height": 49896000
+        },
+        {
+          "key": "aa2137_activation_height",
+          "name": "Validator onboarding",
+          "summary": "New validators join jailed and unjail themselves; a bench above 21 seats; a voting-power cap; own bonds behind a switch.",
+          "height": 49896000
+        }
+      ],
+      "rollback": null,
+      "class": 1,
+      "notes": "Test network build. Every rule listed here is active on the test chain from the height shown."
+    }
+  ],
+  "testnet": true
+}
