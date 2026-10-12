@@ -1,0 +1,27 @@
+[Unit]
+Description=Vordium visor: follow the signed test network release channel
+After=network-online.target vordium-bft.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/vordium
+ExecStart=/opt/vordium/bin/vordium-visor update \
+  --channel https://binaries.vordium.com/testnet \
+  --state-dir /opt/vordium/data/visor \
+  --link /opt/vordium/bin/vordiumchain \
+  --unit vordium-bft \
+  --config /opt/vordium/config/node.toml \
+  --node-rpc http://127.0.0.1:9002 \
+  --validator ${VORDIUM_VALIDATOR} \
+  --pubkey /opt/vordium/pub_key.asc \
+  --genesis /opt/vordium/config/genesis.json \
+  --genesis-sha256 /opt/vordium/genesis.sha256 \
+  --release-env /opt/vordium/visor-release.env \
+  --manifest-dir /opt/vordium
+EnvironmentFile=/opt/vordium/config/visor.env
+Restart=on-failure
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target

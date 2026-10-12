@@ -1,0 +1,17 @@
+[Unit]
+Description=Vordium test network validator
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/vordium
+Environment=VORDIUM_CONFIG=/opt/vordium/config/node.toml
+EnvironmentFile=/opt/vordium/config/node.env
+ExecStart=/opt/vordium/bin/vordiumchain
+Restart=always
+RestartSec=2
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

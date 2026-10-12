@@ -1,0 +1,84 @@
+# Vordium test network (chain id 101102) — node config template.
+# No keys and no addresses. Paths are relative to the install directory.
+# [network] peers and validator_endpoints are sent to you when your application is accepted.
+schema_version = 1
+role = "validator"
+
+[paths]
+data_dir = "data/chain"
+genesis = "config/genesis.json"
+candles_dir = "data/candles"
+
+[keys]
+validator_key_file = "secrets/validator.key"
+vrf_key_file = "secrets/vrf-seed"
+
+[network]
+p2p_listen = "0.0.0.0:9000"
+peers = []                 # provided on acceptance
+validator_endpoints = []   # provided on acceptance, same order as [validators].set
+
+[validators]
+set = ["0x1f8B869f661220203a90728Dfe1e378794678E4C", "0x473c1536cA4AAd24940eE7AC2e4cCfc1001dAC4f", "0x537bD76264b2B06EEe1543B09be7cC9b7e79195d", "0x899FbA7dd14AB4FdE49f02aeB9C47f7963CF0278", "0xb5B1773D3bb1E878C3671cb11bB2401285c964DF", "0xf2Ca09637DAC34FfE62E0a5B79ca6aeb3d13867D", "0xFcC2C4542009C3D9Fa58571e84C31c3F88cC5789"]
+
+[rpc]
+session_port = 9001
+trading_port = 9002
+ws_port = 9003
+evm_rpc_port = 9100
+
+# Activation heights of the test network. Every node runs the same values; do not edit them.
+[consensus]
+aa1873_activation_height = 0
+aa1874_activation_height = 0
+aa1877_activation_height = 0
+aa1878_activation_height = 0
+aa1882_activation_height = 0
+aa1886_activation_height = 0
+aa1888_activation_height = 0
+aa1889_activation_height = 0
+aa1890_activation_height = 0
+aa1892_activation_height = 0
+aa1897_activation_height = 0
+aa1898_activation_height = 0
+aa1900_activation_height = 0
+aa1901_activation_height = 0
+aa1906_activation_height = 0
+aa1958_activation_height = 0
+aa1963_activation_height = 0
+aa1965_activation_height = 0
+aa1967_activation_height = 0
+aa1968_activation_height = 0
+aa1970_activation_height = 0
+aa1998_activation_height = 0
+aa2001_activation_height = 0
+aa2007_activation_height = 0
+aa2053_activation_height = 0
+aa2078_activation_height = 0
+aa2086_activation_height = 49538000
+aa2137_activation_height = 49896000
+aa2007c_activation_height = 49896000
+aa2103_activation_height = 8640000
+aa2103b_activation_height = 9920000
+aa2106_activation_height = 19700000
+slot_timeout_ms = 750
+batch_proposal_timeout_ms = 1500
+bridge_v4_activation_height = 40
+
+[pruning]
+archive = false
+keep_blocks = 400000
+compact_on_boot = false
+
+[logging]
+level = "info"
+
+# The test vault lives on Arbitrum Sepolia. Two public providers from different companies;
+# put their URLs in the environment under these names (see node.env.template).
+[bridge_v4]
+finality_depth = 20
+pass_interval_s = 10
+providers = [
+  { chain_id = 421614, company = "provider-a", url_env = "TN_ARB_SEPOLIA_A", max_block_range = 2000 },
+  { chain_id = 421614, company = "provider-b", url_env = "TN_ARB_SEPOLIA_B", max_block_range = 2000 },
+]
