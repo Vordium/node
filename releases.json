@@ -1,0 +1,79 @@
+{
+ "schema": 1,
+ "chain_id": 101101,
+ "generated_at": "2026-10-10T18:06:56Z",
+ "current": "1a77b3dc672979f7",
+ "releases": [
+  {
+   "sha16": "1a77b3dc672979f7",
+   "sha256": "1a77b3dc672979f72c5db8fe4a6bd130453fce8a0b7645bb7880773665e656c1",
+   "size": 35895240,
+   "built": "2026-10-10T17:44:11Z",
+   "activation_height": 22100000,
+   "activation_key": "aa2007_activation_height",
+   "activations": [
+    {
+     "key": "aa1998_activation_height",
+     "height": 625000,
+     "name": "Validator seat lock and airdrop schedule",
+     "summary": "Seeded validator seats keep their one-year lock; airdrop tranches follow the emission start."
+    },
+    {
+     "key": "aa2001_activation_height",
+     "height": 845000,
+     "name": "Scheduled-change safeguards",
+     "summary": "A scheduled change runs only under the rules that apply to its own operation."
+    },
+    {
+     "key": "aa2007_activation_height",
+     "height": 22100000,
+     "name": "Named agents",
+     "summary": "Named agents with policies, signatures bound to this chain's genesis, and trading safety fixes."
+    },
+    {
+     "key": "aa2053_activation_height",
+     "height": 45920769,
+     "name": "Two-round batch commit",
+     "summary": "Each batch is committed in two voting rounds (prepare, commit)."
+    },
+    {
+     "key": "bridge_v4_activation_height",
+     "height": 54536865,
+     "name": "Bridge vault",
+     "summary": "Deposits and withdrawals through the vault on Arbitrum One, attested by the validators."
+    },
+    {
+     "key": "aa2078_activation_height",
+     "height": 85727000,
+     "name": "Cancel-on-disconnect switch",
+     "summary": "An account can have all its orders cancelled at a time it keeps refreshing."
+    },
+    {
+     "key": "aa2103_activation_height",
+     "height": 85727000,
+     "name": "Market-maker upgrade",
+     "summary": "Order types, batch orders, self-trade prevention and the market-maker tier."
+    },
+    {
+     "key": "aa2103b_activation_height",
+     "height": 85727000,
+     "name": "Margin at fill price",
+     "summary": "Margin is reserved at the price an order can fill at; a price band through the mark."
+    }
+   ],
+   "rollback": "35c37303e4ead292",
+   "class": 1,
+   "notes": "Release 1a77b3dc672979f7 follows the same consensus rules and activation heights as 35c37303e4ead292 and uses the same signer daemon and read service. The validator p2p port bounds each message by its type before reading its body, reads bodies in pieces as they arrive, times out idle connections and slow bodies, and decodes within the frame. Connections from addresses outside the node's peer set are limited to 64 in all and 4 per address, receive their own small inbound queue behind peer traffic, and an address that sends three bad frames in ten minutes is refused for ten minutes; configured peers are always admitted. Each peer's outbound queue is bounded in frames and bytes and never drops a consensus message. State, sync and block-range requests are served at a bounded rate per requester, and replies go only to the requester's validator endpoint or to an address already in the node's peer set. Oracle prices are also gossiped signed by the validator that observed them; a node uses unsigned oracle gossip only from a running-set validator that has not sent it signed prices. Deposit observations are not taken from p2p gossip. Each node keeps a record of the batch votes it received and when it committed each batch, read at GET /batch/{n}/participation; the record is the node's own view, not consensus state. Rollback: 35c37303e4ead292 at any height."
+  },
+  {
+   "sha16": "35c37303e4ead292",
+   "sha256": "35c37303e4ead292505915a73f7e0aad809dbe50548074099cd86e92045a3de2",
+   "size": 35397320,
+   "built": "2026-10-09T13:18:37Z",
+   "activation_height": null,
+   "rollback": null,
+   "class": 1,
+   "notes": ""
+  }
+ ]
+}
