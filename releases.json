@@ -1,14 +1,14 @@
 {
  "schema": 1,
  "chain_id": 101101,
- "generated_at": "2026-10-10T18:06:56Z",
- "current": "1a77b3dc672979f7",
+ "generated_at": "2026-10-12T16:30:45Z",
+ "current": "19a4a7a68365d17e",
  "releases": [
   {
-   "sha16": "1a77b3dc672979f7",
-   "sha256": "1a77b3dc672979f72c5db8fe4a6bd130453fce8a0b7645bb7880773665e656c1",
-   "size": 35895240,
-   "built": "2026-10-10T17:44:11Z",
+   "sha16": "19a4a7a68365d17e",
+   "sha256": "19a4a7a68365d17e18afc8f4d3802a913f9886d5a04927f99a1f3e794d3c6a56",
+   "size": 36018984,
+   "built": "2026-10-12T15:04:58Z",
    "activation_height": 22100000,
    "activation_key": "aa2007_activation_height",
    "activations": [
@@ -61,15 +61,15 @@
      "summary": "Margin is reserved at the price an order can fill at; a price band through the mark."
     }
    ],
-   "rollback": "35c37303e4ead292",
+   "rollback": "1a77b3dc672979f7",
    "class": 1,
-   "notes": "Release 1a77b3dc672979f7 follows the same consensus rules and activation heights as 35c37303e4ead292 and uses the same signer daemon and read service. The validator p2p port bounds each message by its type before reading its body, reads bodies in pieces as they arrive, times out idle connections and slow bodies, and decodes within the frame. Connections from addresses outside the node's peer set are limited to 64 in all and 4 per address, receive their own small inbound queue behind peer traffic, and an address that sends three bad frames in ten minutes is refused for ten minutes; configured peers are always admitted. Each peer's outbound queue is bounded in frames and bytes and never drops a consensus message. State, sync and block-range requests are served at a bounded rate per requester, and replies go only to the requester's validator endpoint or to an address already in the node's peer set. Oracle prices are also gossiped signed by the validator that observed them; a node uses unsigned oracle gossip only from a running-set validator that has not sent it signed prices. Deposit observations are not taken from p2p gossip. Each node keeps a record of the batch votes it received and when it committed each batch, read at GET /batch/{n}/participation; the record is the node's own view, not consensus state. Rollback: 35c37303e4ead292 at any height."
+   "notes": "Release 19a4a7a68365d17e follows the same consensus rules and activation heights as 1a77b3dc672979f7 and uses the same signer daemon. It adds validator onboarding rules that apply only from their own activation height, which this release does not set: a validator added to the registry joins jailed and is seated once its node has caught up and it unjails itself; registration is open above the 21 seats as a bench, and the 21 largest bonds are seated; no seated validator holds more than 15 percent of the voting power after the cap; a validator's own bond is accepted only once own bonds are opened, and converting a seeded bond to an own bond starts a one-year lock. A second activation height, also not set by this release, sets block emission from the seated stake within the published yearly ceiling. Independently of any height, validator registration, unjail and key operations are forwarded between nodes like other signed operations, and price and order reads answer starting until a node has its first price. A node counts each validator's price for 30 seconds after the price arrives; an older price is dropped from its price set. The read service reports each validator's rank by bond and its place (active, bench, jailed). Rollback: 1a77b3dc672979f7 at any height while neither height is set."
   },
   {
-   "sha16": "35c37303e4ead292",
-   "sha256": "35c37303e4ead292505915a73f7e0aad809dbe50548074099cd86e92045a3de2",
-   "size": 35397320,
-   "built": "2026-10-09T13:18:37Z",
+   "sha16": "1a77b3dc672979f7",
+   "sha256": "1a77b3dc672979f72c5db8fe4a6bd130453fce8a0b7645bb7880773665e656c1",
+   "size": 35895240,
+   "built": "2026-10-10T17:44:11Z",
    "activation_height": null,
    "rollback": null,
    "class": 1,

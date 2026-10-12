@@ -2,10 +2,11 @@
 
 Network genesis sha256: `2c1c0679fa6ab8358f1d3e8d294a8d1c73ac2e2caf9079f1216abedc3d9fdf4f` (also in `genesis.sha256`).
 
-Current release: `1a77b3dc672979f7`.
+Current release: `19a4a7a68365d17e`.
 
 | release | signed manifest |
 |---|---|
+| `19a4a7a68365d17e` | `SHA256SUMS.19a4a7a68365d17e` + `.asc` (node and signer daemon: update both together) |
 | `1a77b3dc672979f7` | `SHA256SUMS.1a77b3dc672979f7` + `.asc` (node and signer daemon: update both together) |
 | `35c37303e4ead292` | `SHA256SUMS.35c37303e4ead292` + `.asc` (node and signer daemon: update both together) |
 | `5ba9268e6c233cac` | `SHA256SUMS.5ba9268e6c233cac` + `.asc` (node and signer daemon: update both together) |
