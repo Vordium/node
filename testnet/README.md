@@ -14,12 +14,12 @@ Test VORD and test USDC have no value. Use it to rehearse every step before you 
 | Public RPC | `https://rpc-testnet.vordium.com` (JSON-RPC) · `https://testnet.vordex.xyz/chain` (node routes) |
 | Release key | `C5EB 4728 F660 369C E519 D834 B48F B4B7 1EFD 48AE` (same key as the live network) |
 
-The trust rules are the ones in the main [README](../README.md): two keys (cold operator key, hot validator key), no
+The trust rules are the ones in [SECURITY.md](../SECURITY.md) and the [mainnet guide](../mainnet/README.md): two keys (cold operator key, hot validator key), no
 private key in any file of this repository, and nothing runs that the visor has not verified against the pinned key.
 
 ## 1. Install the visor
 
-All commands run from the install directory `/opt/vordium` (the same layout as the main README).
+All commands run from the install directory `/opt/vordium` (the same layout as the mainnet guide).
 
 ```
 B=https://binaries.vordium.com/testnet

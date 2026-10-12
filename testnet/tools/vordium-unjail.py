@@ -19,7 +19,7 @@ from eth_keys import keys
 from eth_utils import keccak
 import os as _os, sys as _sys
 _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
-import vordium_rollb  # the signing phase (legacy / window / genesis-bound)
+import vordium_signing  # the signing phase (legacy / window / genesis-bound)
 
 
 def rpc_post(url, body):
@@ -51,12 +51,12 @@ def main():
     ap.add_argument("--keyfile", default="secrets/validator.key")
     ap.add_argument("--nonce", type=int, required=True, help="the next unused validator op nonce (one above the last one you used)")
     ap.add_argument("--go", action="store_true", help="submit (default: dry-run)")
-    vordium_rollb.add_cli(ap)
+    vordium_signing.add_cli(ap)
     a = ap.parse_args()
     net = NETWORKS[a.network]
     a.rpc = (a.rpc or net["rpc"]).rstrip("/")
-    if a.releases == vordium_rollb.DEFAULT_RELEASES: a.releases = net["releases"]
-    if a.spec == vordium_rollb.DEFAULT_SPEC: a.spec = net["spec"]
+    if a.releases == vordium_signing.DEFAULT_RELEASES: a.releases = net["releases"]
+    if a.spec == vordium_signing.DEFAULT_SPEC: a.spec = net["spec"]
     raw = open(a.keyfile).read().strip()
     raw = raw[2:] if raw.startswith("0x") else raw
     if len(raw) != 64:
@@ -82,10 +82,10 @@ def main():
     if why:
         print(json.dumps({"error": f"nothing signed: {why}", "address": address, "entry": e})); sys.exit(3)
     try:
-        phase = vordium_rollb.signing_phase(a.rpc + "/", chain_id, a.releases, a.spec, a.genesis)
-    except vordium_rollb.SigningPaused as ex:
+        phase = vordium_signing.signing_phase(a.rpc + "/", chain_id, a.releases, a.spec, a.genesis)
+    except vordium_signing.SigningPaused as ex:
         print(json.dumps({"error": f"nothing signed: {ex}"})); sys.exit(6)
-    msg = "\n".join(vordium_rollb.with_genesis_line(["Vordium Admin", f"Chain: {chain_id}", "Action: Unjail Validator",
+    msg = "\n".join(vordium_signing.with_genesis_line(["Vordium Admin", f"Chain: {chain_id}", "Action: Unjail Validator",
         f"Validator: 0x{address[2:].lower()}", f"Nonce: {a.nonce}"], phase))
     digest = keccak(b"\x19Ethereum Signed Message:\n" + str(len(msg.encode())).encode() + msg.encode())
     sig = pk.sign_msg_hash(digest)

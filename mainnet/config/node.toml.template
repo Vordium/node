@@ -5,11 +5,11 @@ role = "validator"
 
 [paths]
 data_dir        = "data/chain"
-genesis         = "genesis.json"   # received privately after admission; its sha256 must equal genesis.sha256
+genesis         = "config/genesis.json"   # received privately after admission; its sha256 must equal genesis.sha256
 candles_dir     = "data/candles"
 
 [keys]
-# Paths ONLY. Generate the hot key on the box (README step 3) and chmod 0600.
+# Paths ONLY. Generate the hot key on the box (mainnet/README.md step 3) and chmod 0600.
 # The signer reads these; the key bytes never appear in this file.
 validator_key_file = "secrets/validator.key"
 vrf_key_file       = "secrets/vrf-seed"
@@ -22,10 +22,9 @@ signer_last_signed = "data/chain/last_signed.json"
 address = ""
 
 [network]
-# Peers are NOT hand-typed. The launcher populates them from seeds.json for the network
-# whose genesis_sha256 matches genesis.sha256. Leave this empty.
-peers = []
-# The genesis validator set (addresses, vrf pubkeys) is read from genesis.json — not here.
+p2p_listen = "0.0.0.0:9000"
+peers = []                 # provided on acceptance
+validator_endpoints = []   # provided on acceptance, same order as [validators].set
 
 [validators]
 # The seven genesis validators (public identities from genesis.json), address-sorted. Do not edit.

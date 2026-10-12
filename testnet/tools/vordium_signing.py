@@ -16,8 +16,8 @@ import json
 import re
 import urllib.request
 
-ROLLB_KEY = "aa2007_activation_height"
-ROLLB_WINDOW = 3000
+SIGNING_KEY = "aa2007_activation_height"
+SIGNING_WINDOW = 3000
 # The public hosts refuse the default Python user agent, so every request names this tool.
 _opener = urllib.request.build_opener()
 _opener.addheaders = [("User-Agent", "vordium-operator-tools/1")]
@@ -56,17 +56,17 @@ def activation_height(releases, chain_id):
     for rel in releases["releases"]:
         if not isinstance(rel, dict):
             continue
-        if rel.get("activation_key") == ROLLB_KEY:
+        if rel.get("activation_key") == SIGNING_KEY:
             if not _is_height(rel.get("activation_height")):
-                raise ValueError(f"a release names {ROLLB_KEY} without a valid height")
+                raise ValueError(f"a release names {SIGNING_KEY} without a valid height")
             found.add(rel["activation_height"])
         for a in rel.get("activations") or []:
-            if isinstance(a, dict) and a.get("key") == ROLLB_KEY:
+            if isinstance(a, dict) and a.get("key") == SIGNING_KEY:
                 if not _is_height(a.get("height")):
-                    raise ValueError(f"a release names {ROLLB_KEY} without a valid height")
+                    raise ValueError(f"a release names {SIGNING_KEY} without a valid height")
                 found.add(a["height"])
     if len(found) > 1:
-        raise ValueError(f"the release list names {ROLLB_KEY} at {len(found)} different heights")
+        raise ValueError(f"the release list names {SIGNING_KEY} at {len(found)} different heights")
     return next(iter(found)) if found else None
 
 
@@ -91,7 +91,7 @@ def signing_phase(eth_rpc, chain_id, releases_src=DEFAULT_RELEASES, spec_src=DEF
             head = int(json.loads(r.read())["result"], 16)
     except Exception as e:
         raise SigningPaused(f"the chain's current height could not be read ({e})")
-    if head < H - ROLLB_WINDOW:
+    if head < H - SIGNING_WINDOW:
         return {"kind": "legacy", "H": H, "head": head, "genesis": None}
     if head < H:
         raise SigningPaused(f"the chain switches its signing format at height {H:,}, {H - head:,} heights from now; "
