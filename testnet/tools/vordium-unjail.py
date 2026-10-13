@@ -7,6 +7,9 @@ EXACT EIP-191 text the node verifies ("Vordium Admin\\nChain: <id>\\n
 [Genesis: <sha256>\\n]Action: Unjail Validator\\nValidator: 0x<addr>\\nNonce: <n>"), signs it and POSTs
 {"op":"UnjailValidator", ...} to /submit. The private key is never printed or logged. Default is DRY-RUN.
 
+Send it through the public endpoint (the default) or through your own node (--rpc http://127.0.0.1:9002): a jailed
+node is not seated, but it forwards its own signed unjail to the seated validators, which place it in a block.
+
 It refuses to sign (nothing sent) unless the entry says the unjail can be accepted: jailed, not a reserved seat, bond
 at or above the minimum, and the jail period over (`jailed_until_ms` — the base period doubles per recent
 offence, `jail_offences`). The chain checks all of it again; a refused unjail still consumes its nonce, so
@@ -47,7 +50,7 @@ def rpc_get(url):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--network", choices=sorted(NETWORKS), default="mainnet")
-    ap.add_argument("--rpc", default=None, help="node base URL (default: the network's public endpoint). A jailed node cannot place its own unjail in a block, so send it through a seated node.")
+    ap.add_argument("--rpc", default=None, help="node base URL (default: the network's public endpoint). Your own node works too: it forwards the unjail to the seated validators.")
     ap.add_argument("--keyfile", default="secrets/validator.key")
     ap.add_argument("--nonce", type=int, required=True, help="the next unused validator op nonce (one above the last one you used)")
     ap.add_argument("--go", action="store_true", help="submit (default: dry-run)")

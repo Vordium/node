@@ -132,7 +132,8 @@ python3 testnet/tools/vordium-unjail.py --network testnet --nonce 1 --go     # s
 ```
 
 - `--nonce` is your next unused validator op nonce: 1 the first time, one higher each time after.
-- By default the tool sends through the public endpoint, which forwards to a seated validator.
+- By default the tool sends through the public endpoint. Your own node also works (`--rpc http://127.0.0.1:9002`):
+  it forwards the signed unjail to the seated validators.
 - It refuses, and signs nothing, when you are not jailed, the jail period is not over, or your bond is below the minimum.
 
 You are seated from the next epoch (33,000 heights). Missing too many slots jails you again; each repeat within 30 days

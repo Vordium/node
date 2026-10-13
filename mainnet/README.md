@@ -141,6 +141,20 @@ When a new release is published, `releases.json` names it as `current` and the p
 Download and verify it as in step 1, re-point `bin/vordiumchain`, write its id into `visor-release.env`, then restart.
 To roll back, do the same with the `rollback` id; its signed checksums stay in this folder alongside the current ones.
 
+## Unjail
+
+A validator that missed too many slots is jailed. When the jail period is over, it unjails itself with its own key:
+
+```
+python3 mainnet/tools/vordium-unjail.py --nonce <next op nonce>          # dry run: prints the message
+python3 mainnet/tools/vordium-unjail.py --nonce <next op nonce> --go     # submit
+```
+
+- By default the tool sends through the public endpoint. Your own node also works (`--rpc http://127.0.0.1:9002`):
+  it forwards the signed unjail to the seated validators.
+- It refuses, and signs nothing, when you are not jailed, the jail period is not over, or your bond is below the minimum.
+- Needs `eth-keys` and `eth-utils` (`pip install eth-keys eth-utils`).
+
 ## Monitor
 
 ```
