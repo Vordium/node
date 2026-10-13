@@ -23,21 +23,26 @@ twin is the `agents` section of <https://rpc.vordium.com/network-spec.json>.
 
 Two checks exist:
 
-- the **capability gate** — per owner: `SetAgentMode` (0 off, 1 reduce-only, 2 active) and `SetAgentCaps`
-  (max leverage, allowed order types, max input per trade, max total position);
 - the **policy engine** — per (owner, agent): a signed `SetAgentPolicyV1` policy, per-market limits
-  (`SetAgentMarketLimit`) and a daily risk record.
+  (`SetAgentMarketLimit`) and a daily risk record. This is how an owner sets an agent's limits;
+- the **capability gate** — per owner: the mode and caps stored before the agent operations were replaced. Nothing
+  can change them any more (`SetAgentCaps` and `SetAgentMode` do nothing).
 
-On mainnet today session-key orders go through the **capability gate**. Policies and market limits are accepted,
-stored and readable, and apply when the policy engine is in force. Agent actions can also be paused network-wide; while
-paused, new agent actions are refused and cancels still pass.
+Which one decides depends on the network's agent policy switch:
+
+- **switch on** — the agent's v1 policy and market limits decide every agent action (default deny: no policy, no
+  trading);
+- **switch off** — policies and market limits are accepted, stored and readable, but not enforced; a registered agent's
+  order meets the capability gate with that stored mode and caps;
+- a session key that is **not** a registered agent of its owner is not checked by any agent gate.
+
+Mainnet runs with the switch off. The network says which applies now: `agent_policy_active` on
+<https://rpc.vordium.com/truth/v1>. Agent actions can also be paused network-wide; while paused, new agent actions are
+refused and cancels still pass.
 
 Capability gate refusals: `agent mode OFF` · `agent REDUCE_ONLY: order must reduce position` · `agent mode invalid` ·
 `agent caps unset` · `agent order type not allowed` · `agent leverage over cap` · `agent input over cap` ·
 `agent position over cap`.
-
-`SetAgentCaps.maxLeverage` is compared with the order's leverage **in basis points** (10000 = 1x), and the default caps
-carry 5. Set explicit caps before an agent places orders.
 
 ## Ops
 
@@ -53,10 +58,11 @@ EIP-712 digest. Agent ops are submitted to the public intake `POST https://rpc.v
 | SetAgentPolicyV1 | 132 | owner; the agent key may sign a pure tightening | `SetAgentPolicyV1(address owner,address agent,uint32 capsBitmask,uint8 sideMode,uint128 maxTotalExposure6dec,uint32 maxLeverageBps,uint128 dailyLossLimit6dec,uint128 dailyFeeCap6dec,uint32 opsPerWindow,uint32 opsWindowMs,uint32 activeFromMsOfDay,uint32 activeToMsOfDay,uint32 oracleBandBps,bool lockAutoClear,uint64 expiresMs,bool enabled,uint64 nonce)` |
 | SetAgentMarketLimit | 120 | owner | `SetAgentMarketLimit(address owner,address agent,uint32 pair,bool allowed,uint128 maxOrder18dec,uint128 maxPosition18dec,uint32 maxLeverageBps,uint64 nonce)` |
 | ClearAgentLock | 133 | owner | `ClearAgentLock(address owner,address agent,uint64 lockSinceMs,uint64 nonce)` |
-| SetAgentCaps | 18 | owner | `SetAgentCaps(address owner,uint64 maxLeverage,uint32 allowedOrderTypes,uint128 maxInputPerTrade,uint128 maxTotalPosition)` |
-| SetAgentMode | 19 | owner | `SetAgentMode(address owner,uint8 mode)` |
 | SessionCreate | 9 | owner (recovered signer) | `SessionCreate(address sessionKey,uint256 expiresAt,uint256 nonce)` — `POST /session/create` |
 | SessionRevoke | 10 | owner | `SessionRevoke(address owner,uint256 nonce)` — `POST /session/revoke` |
+
+`SetAgentCaps` (18), `SetAgentMode` (19), `RegisterAgent` (117) and `SetAgentPolicy` (119) are no longer applied by the
+chain: an op of these kinds changes nothing. Use the ops in the table.
 
 Units: `*6dec` = USDC with 6 decimals; `*18dec` = base-asset size with 18 decimals; `*Bps` = basis points
 (10000 = 100 % or 1x); `*Ms` = milliseconds of block time; `*MsOfDay` = milliseconds since 00:00 UTC (the window wraps
@@ -87,7 +93,6 @@ A policy carrying any bit outside 63 is refused. There is no withdraw bit.
   counter per (owner, agent): each needs a `nonce` greater than the last one used (a UNIX millisecond timestamp is a
   common choice). The first registration needs any nonce above 0. An agent-signed policy tightening uses the agent's
   own counter.
-- SetAgentCaps and SetAgentMode carry no nonce.
 - Sessions use the owner's own session counter; nonce 0 is refused. `expiresAt` is in **seconds** and at most
   90 days ahead of block time.
 - **Loosening is rate-limited:** a policy or market-limit change that loosens any limit applies only one hour after the
