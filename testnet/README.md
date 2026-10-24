@@ -6,7 +6,7 @@ Test VORD and test USDC have no value. Use it to rehearse every step before you 
 | | |
 |---|---|
 | Chain id | `101102` |
-| Genesis sha256 | `3263e89e7cd024467a58c352a4d4446f30020093ed979d6e318196c7007d2482` |
+| Genesis sha256 | `8b5d414c5cd5d18bc468b64f87ac8e2c2b5ff494c769d5e09dcf50ce75a59792` |
 | Genesis file | `https://testnet.vordex.xyz/genesis.json` (public on the test network) |
 | Release channel | `https://binaries.vordium.com/testnet/` |
 | Release index | `https://binaries.vordium.com/testnet/releases.json` (read `current`; it changes with every test release) |
@@ -63,7 +63,7 @@ Run it once with `--dry-run --once` and read what it would do; then drop both fl
 
 ```
 curl -fsSLo config/genesis.json https://testnet.vordex.xyz/genesis.json
-sha256sum config/genesis.json      # must be 3263e89e…2482
+sha256sum config/genesis.json      # must be 8b5d414c…9792
 ```
 
 The chain is identified by this hash, never by its chain id. A running test node reports the same value:

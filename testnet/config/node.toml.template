@@ -19,7 +19,7 @@ peers = []                 # provided on acceptance
 validator_endpoints = []   # provided on acceptance, same order as [validators].set
 
 [validators]
-set = ["0x1f8B869f661220203a90728Dfe1e378794678E4C", "0x473c1536cA4AAd24940eE7AC2e4cCfc1001dAC4f", "0x537bD76264b2B06EEe1543B09be7cC9b7e79195d", "0x899FbA7dd14AB4FdE49f02aeB9C47f7963CF0278", "0xb5B1773D3bb1E878C3671cb11bB2401285c964DF", "0xf2Ca09637DAC34FfE62E0a5B79ca6aeb3d13867D", "0xFcC2C4542009C3D9Fa58571e84C31c3F88cC5789"]
+set = ["0x05E67609fA7f7830509c2b508E96c6ADe6d0D1bE", "0x1e581109AD004c6124800f0d10dda646F480Bf11", "0x5E433f9eF606ee4fecee6d482D0ADFd158e7598b", "0x71B859E2355Fff85e4b7192FE8947762d1Af93C3", "0x891D3c72D64E1E05bdF4A69c3416306E24738C3B", "0xa078Eb334a798aB90F565d63Bd82DCD220246147", "0xD8538057dfDf9BDA424Ae1A9f03F2706Bd0311d0"]
 
 [rpc]
 session_port = 9001
@@ -29,6 +29,10 @@ evm_rpc_port = 9100
 
 # Activation heights of the test network. Every node runs the same values; do not edit them.
 [consensus]
+aa2180_activation_height = 77300000
+aa2179_activation_height = 76370000
+aa2172_activation_height = 63400000
+aa2171_activation_height = 58470000
 aa1873_activation_height = 0
 aa1874_activation_height = 0
 aa1877_activation_height = 0
@@ -55,15 +59,19 @@ aa2001_activation_height = 0
 aa2007_activation_height = 0
 aa2053_activation_height = 0
 aa2078_activation_height = 0
-aa2086_activation_height = 49538000
-aa2137_activation_height = 49896000
-aa2007c_activation_height = 49896000
-aa2103_activation_height = 8640000
-aa2103b_activation_height = 9920000
-aa2106_activation_height = 19700000
+aa2086_activation_height = 0
+aa2160_activation_height = 27290000
+cross_margin_activation_height = 10730000
+aa2137_activation_height = 0
+aa2007c_activation_height = 0
+aa2103_activation_height = 0
+aa2103b_activation_height = 0
+aa2106_activation_height = 0
+aa2133_activation_height = 0
+aa2149_activation_height = 0
+bridge_v4_activation_height = 40
 slot_timeout_ms = 750
 batch_proposal_timeout_ms = 1500
-bridge_v4_activation_height = 40
 
 [pruning]
 archive = false

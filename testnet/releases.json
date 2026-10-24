@@ -1,14 +1,14 @@
 {
   "schema": 1,
   "chain_id": 101102,
-  "generated_at": "2026-10-12T12:14:34Z",
-  "current": "ab5e2ed41d7de3b5",
+  "generated_at": "2026-10-24T15:54:47Z",
+  "current": "b817ce6784040f09",
   "releases": [
     {
-      "sha16": "ab5e2ed41d7de3b5",
-      "sha256": "ab5e2ed41d7de3b5c3d9ad6f06f93ba250cfd3c48dff2f202644ea02275dd944",
-      "activation_height": 49896000,
-      "activation_key": "aa2137_activation_height",
+      "sha16": "b817ce6784040f09",
+      "sha256": "b817ce6784040f09782294c08f74bd3410adbbd823752f3eacc331fafbf4f195",
+      "activation_height": 0,
+      "activation_key": "aa2149_activation_height",
       "activations": [
         {
           "key": "aa1998_activation_height",
@@ -29,34 +29,45 @@
           "height": 0
         },
         {
-          "key": "aa2086_activation_height",
-          "name": "Validator self-unjail",
-          "summary": "A jailed validator unjails itself after its jail period, which doubles for repeat offences.",
-          "height": 49538000
-        },
-        {
           "key": "aa2007c_activation_height",
           "name": "Stake-based emission",
           "summary": "Block emission follows the seated stake, within the published yearly ceiling.",
-          "height": 49896000
+          "height": 0
+        },
+        {
+          "key": "aa2086_activation_height",
+          "name": "Validator self-unjail",
+          "summary": "A jailed validator unjails itself after its jail period, which doubles for repeat offences.",
+          "height": 0
+        },
+        {
+          "key": "aa2133_activation_height",
+          "name": "EVM blocks",
+          "summary": "EVM transactions run in their own blocks at batch boundaries, in a 1-second and a 60-second lane, with CoreWriter actions into the core state and the USDC ERC-20 link.",
+          "height": 0
         },
         {
           "key": "aa2137_activation_height",
           "name": "Validator onboarding",
           "summary": "New validators join jailed and unjail themselves; a bench above 21 seats; a voting-power cap; own bonds behind a switch.",
-          "height": 49896000
+          "height": 0
+        },
+        {
+          "key": "aa2149_activation_height",
+          "name": "Vault order rules and USDC link reopening",
+          "summary": "Vault orders pay the request allowance and follow the price and size steps and post-only; the owners can reopen a frozen USDC link once its books balance.",
+          "height": 0
         }
       ],
-      "rollback": "b7fca39a1c653695",
+      "rollback": "56d234527af4cefa",
       "class": 1,
-      "notes": "Test network build. Every rule listed here is active on the test chain from the height shown.",
-      "switch_after_ms": 1791811800000
+      "notes": "Test network upgrade, no activation height. A node with no state can install from public files: a checkpoint (batch height and state root) signed by a quorum of validators, and a snapshot file in which four fields are left at their defaults (each is committed by hash, fetched from a peer and checked against that hash). The node checks the signatures against the validator set it trusts and the snapshot against that root. A node with [state_sync] export_dir writes these files. An older read service refuses a node.toml with [state_sync]: roll read services first."
     },
     {
-      "sha16": "b7fca39a1c653695",
-      "sha256": "b7fca39a1c65369574de198299be5723b26dffdb5c47abe52b8ee1ca8007a8ce",
-      "activation_height": 49896000,
-      "activation_key": "aa2137_activation_height",
+      "sha16": "56d234527af4cefa",
+      "sha256": "56d234527af4cefa2eff83f3d7451b37109acf5cc87cb3d7100f1099eae259fb",
+      "activation_height": 0,
+      "activation_key": "aa2149_activation_height",
       "activations": [
         {
           "key": "aa1998_activation_height",
@@ -77,28 +88,39 @@
           "height": 0
         },
         {
-          "key": "aa2086_activation_height",
-          "name": "Validator self-unjail",
-          "summary": "A jailed validator unjails itself after its jail period, which doubles for repeat offences.",
-          "height": 49538000
-        },
-        {
           "key": "aa2007c_activation_height",
           "name": "Stake-based emission",
           "summary": "Block emission follows the seated stake, within the published yearly ceiling.",
-          "height": 49896000
+          "height": 0
+        },
+        {
+          "key": "aa2086_activation_height",
+          "name": "Validator self-unjail",
+          "summary": "A jailed validator unjails itself after its jail period, which doubles for repeat offences.",
+          "height": 0
+        },
+        {
+          "key": "aa2133_activation_height",
+          "name": "EVM blocks",
+          "summary": "EVM transactions run in their own blocks at batch boundaries, in a 1-second and a 60-second lane, with CoreWriter actions into the core state and the USDC ERC-20 link.",
+          "height": 0
         },
         {
           "key": "aa2137_activation_height",
           "name": "Validator onboarding",
           "summary": "New validators join jailed and unjail themselves; a bench above 21 seats; a voting-power cap; own bonds behind a switch.",
-          "height": 49896000
+          "height": 0
+        },
+        {
+          "key": "aa2149_activation_height",
+          "name": "Vault order rules and USDC link reopening",
+          "summary": "Vault orders pay the request allowance and follow the price and size steps and post-only; the owners can reopen a frozen USDC link once its books balance.",
+          "height": 0
         }
       ],
-      "rollback": null,
+      "rollback": "545acf6a8b8cac79",
       "class": 1,
-      "notes": "Test network build. Every rule listed here is active on the test chain from the height shown."
+      "notes": "Test network upgrade, no activation height. Peer connections use a hybrid key exchange: X25519 together with ML-KEM-768 (NIST FIPS 203), the session key derived from both, versioned so older and newer nodes connect during the upgrade and a classic-only connection is refused once peer_auth = require. A node accepts peer connections only once its validator set is loaded. A node fills gaps in its EVM block index from peers, checking every block against its hash and parent. The read service answers EVM reads from the other server when its own node is down or behind."
     }
-  ],
-  "testnet": true
+  ]
 }
