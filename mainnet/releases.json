@@ -1,14 +1,14 @@
 {
  "schema": 1,
  "chain_id": 101101,
- "generated_at": "2026-10-12T16:30:45Z",
- "current": "19a4a7a68365d17e",
+ "generated_at": "2026-11-12T13:05:42Z",
+ "current": "df1116da247abf5f",
  "releases": [
   {
-   "sha16": "19a4a7a68365d17e",
-   "sha256": "19a4a7a68365d17e18afc8f4d3802a913f9886d5a04927f99a1f3e794d3c6a56",
-   "size": 36018984,
-   "built": "2026-10-12T15:04:58Z",
+   "sha16": "df1116da247abf5f",
+   "sha256": "df1116da247abf5f03634a5d0151e3b8327aa4d839573c4f8ac71b3b237cae04",
+   "size": 42555464,
+   "built": "2026-11-12T12:16:39Z",
    "activation_height": 22100000,
    "activation_key": "aa2007_activation_height",
    "activations": [
@@ -61,15 +61,15 @@
      "summary": "Margin is reserved at the price an order can fill at; a price band through the mark."
     }
    ],
-   "rollback": "1a77b3dc672979f7",
+   "rollback": "19a4a7a68365d17e",
    "class": 1,
-   "notes": "Release 19a4a7a68365d17e follows the same consensus rules and activation heights as 1a77b3dc672979f7 and uses the same signer daemon. It adds validator onboarding rules that apply only from their own activation height, which this release does not set: a validator added to the registry joins jailed and is seated once its node has caught up and it unjails itself; registration is open above the 21 seats as a bench, and the 21 largest bonds are seated; no seated validator holds more than 15 percent of the voting power after the cap; a validator's own bond is accepted only once own bonds are opened, and converting a seeded bond to an own bond starts a one-year lock. A second activation height, also not set by this release, sets block emission from the seated stake within the published yearly ceiling. Independently of any height, validator registration, unjail and key operations are forwarded between nodes like other signed operations, and price and order reads answer starting until a node has its first price. A node counts each validator's price for 30 seconds after the price arrives; an older price is dropped from its price set. The read service reports each validator's rank by bond and its place (active, bench, jailed). Rollback: 1a77b3dc672979f7 at any height while neither height is set."
+   "notes": "Release df1116da247abf5f carries consensus rules that each apply only from their own activation height. This release sets none of those heights, so on this network it applies the same consensus rules and activation heights as 19a4a7a68365d17e and uses the same signer daemon. Rollback: 19a4a7a68365d17e at any height while no new activation height is set."
   },
   {
-   "sha16": "1a77b3dc672979f7",
-   "sha256": "1a77b3dc672979f72c5db8fe4a6bd130453fce8a0b7645bb7880773665e656c1",
-   "size": 35895240,
-   "built": "2026-10-10T17:44:11Z",
+   "sha16": "19a4a7a68365d17e",
+   "sha256": "19a4a7a68365d17e18afc8f4d3802a913f9886d5a04927f99a1f3e794d3c6a56",
+   "size": 36018984,
+   "built": "2026-10-12T17:03:58Z",
    "activation_height": null,
    "rollback": null,
    "class": 1,
