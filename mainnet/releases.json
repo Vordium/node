@@ -1,14 +1,14 @@
 {
  "schema": 1,
  "chain_id": 101101,
- "generated_at": "2026-11-12T13:05:42Z",
- "current": "df1116da247abf5f",
+ "generated_at": "2026-11-17T10:54:06Z",
+ "current": "8dc00864f09c7d88",
  "releases": [
   {
-   "sha16": "df1116da247abf5f",
-   "sha256": "df1116da247abf5f03634a5d0151e3b8327aa4d839573c4f8ac71b3b237cae04",
-   "size": 42555464,
-   "built": "2026-11-12T12:16:39Z",
+   "sha16": "8dc00864f09c7d88",
+   "sha256": "8dc00864f09c7d88ca9675a879b731c604c9abd4cb799a790aaff66a0a4142c2",
+   "size": 42775304,
+   "built": "2026-11-17T00:32:27Z",
    "activation_height": 22100000,
    "activation_key": "aa2007_activation_height",
    "activations": [
@@ -59,17 +59,35 @@
      "height": 85727000,
      "name": "Margin at fill price",
      "summary": "Margin is reserved at the price an order can fill at; a price band through the mark."
+    },
+    {
+     "key": "aa2160_activation_height",
+     "height": 478651191,
+     "name": "Open-interest caps and owner-only money moves",
+     "summary": "Orders and fills that would take a market past its open-interest cap are refused (closing and reduce-only are not); every asset move needs the owner's own signature; creating a vault costs a fee paid to the treasury."
+    },
+    {
+     "key": "aa2172_activation_height",
+     "height": 478651191,
+     "name": "Stop orders, fee settings and partial liquidation",
+     "summary": "Stop, take-profit and stop-loss orders rest on chain and fire when the mark reaches their trigger; the perps taker and maker fees are owner settings; an isolated position is liquidated in part where that restores it."
+    },
+    {
+     "key": "aa2179_activation_height",
+     "height": 478651191,
+     "name": "Per-market order limits",
+     "summary": "Each market carries its own largest limit order, largest market order, largest order value and largest position per account, set by the owners; an order over a limit is refused at submission and at apply with its code."
     }
    ],
-   "rollback": "19a4a7a68365d17e",
+   "rollback": "df1116da247abf5f",
    "class": 1,
-   "notes": "Release df1116da247abf5f carries consensus rules that each apply only from their own activation height. This release sets none of those heights, so on this network it applies the same consensus rules and activation heights as 19a4a7a68365d17e and uses the same signer daemon. Rollback: 19a4a7a68365d17e at any height while no new activation height is set."
+   "notes": "Release 8dc00864f09c7d88 reads the Arbitrum vault through two separately keyed endpoints that must agree on the block hash and on the values read at that block, and checks each read against the vault's running totals: a surplus is accepted with a warning, an unexplained decrease is refused until cleared, and an unreadable read record is set aside. These checks are in the node's read layer only: consensus rules, activation heights and the signer daemon are the same as df1116da247abf5f. Rollback: df1116da247abf5f at any height."
   },
   {
-   "sha16": "19a4a7a68365d17e",
-   "sha256": "19a4a7a68365d17e18afc8f4d3802a913f9886d5a04927f99a1f3e794d3c6a56",
-   "size": 36018984,
-   "built": "2026-10-12T17:03:58Z",
+   "sha16": "df1116da247abf5f",
+   "sha256": "df1116da247abf5f03634a5d0151e3b8327aa4d839573c4f8ac71b3b237cae04",
+   "size": 42555464,
+   "built": "2026-11-12T17:16:21Z",
    "activation_height": null,
    "rollback": null,
    "class": 1,
