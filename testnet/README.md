@@ -87,7 +87,7 @@ cp testnet/config/node.toml.template config/node.toml
 cp testnet/config/node.env.template  config/node.env   # two Arbitrum Sepolia RPC URLs, no keys
 ```
 
-Leave `[consensus]` exactly as shipped. `[network] peers` and `validator_endpoints` stay empty for now: the node
+Leave `[consensus]` exactly as shipped. `[network] peers` and `validator_endpoints` stay empty in the template: the node
 refuses to start without them (`peering INVALID`), and they are sent to you when your application is accepted (step 7).
 
 ## 5. Print your join request

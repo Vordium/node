@@ -91,7 +91,7 @@ cp mainnet/config/node.env.template  node.env
 ```
 
 Edit only `[paths]`, `[keys]` and `[pruning]` for your machine. Leave `[validators]` and `[consensus]` exactly as
-shipped: every validator runs the same values. `[network] peers` and `validator_endpoints` stay empty for now; they
+shipped: every validator runs the same values. `[network] peers` and `validator_endpoints` stay empty in the template; they
 are sent to you when your application is accepted, and the node refuses to start without them.
 
 ## 5. Print your join request
